@@ -13,23 +13,24 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Update extends NormalRoute {
+public class UpdateRoute extends NormalRoute {
 
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.addHeader("Access-Control-Allow-Origin", "*");
         String jsonDataRaw = request.getReader().lines().collect(Collectors.joining());
         if (jsonDataRaw.isEmpty() || jsonDataRaw.trim().isEmpty()) {
             returnError(response, "No JSON body");
             return;
         }
 
-        JSONObject jsonObject;
+        JSONArray jsonObject;
         UUID uuid = UUID.fromString(request.getParameter("userID"));
 
         try {
             JSONParser jsonParser = new JSONParser();
-            jsonObject = (JSONObject) jsonParser.parse(jsonDataRaw);
+            jsonObject = (JSONArray) jsonParser.parse(jsonDataRaw);
         } catch (Exception e) {
             returnError(response, "Malformed JSON.");
             return;
@@ -52,6 +53,8 @@ public class Update extends NormalRoute {
         }
 
         player.getJsonUpdates().clear(); //Clear the updates after they have been sent.
+        player.checkedIn(); //Update unix timestamp of last checkin
+        player.handleJsonUpdates(jsonObject); //Send updates to player class to be handled.
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);

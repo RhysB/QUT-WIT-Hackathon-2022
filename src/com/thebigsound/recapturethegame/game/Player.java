@@ -1,5 +1,7 @@
 package com.thebigsound.recapturethegame.game;
 
+import com.thebigsound.recapturethegame.Launcher;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -57,7 +59,18 @@ public class Player implements ChattableObject {
         return jsonUpdates;
     }
 
-    public void setJsonUpdates(ArrayList<JSONObject> jsonUpdates) {
-        this.jsonUpdates = jsonUpdates;
+    public void handleJsonUpdates(JSONArray jsonArray) {
+        for(Object jsonUpdateOBJ : jsonArray) {
+            JSONObject jsonObject = (JSONObject) jsonUpdateOBJ;
+
+            if(jsonObject.containsKey("type") && String.valueOf(jsonObject.get("type")).equalsIgnoreCase("message")) {
+                String message = String.valueOf(jsonObject.get("message"));
+                this.lobby.broadcastTest(this.username + ": " + message);
+            }
+
+        }
+
+        Launcher.getLauncher().runTimerTasks(); //Run timer tasks manually
     }
+
 }

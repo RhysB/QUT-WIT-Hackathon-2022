@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class NormalRoute extends HttpServlet {
-    public Launcher launcher = Launcher.getLauncher();
+    public Launcher launcher = Launcher.launcher;
 
     protected void returnError(HttpServletResponse response, String errorMessage) throws IOException {
         response.setContentType("application/json");

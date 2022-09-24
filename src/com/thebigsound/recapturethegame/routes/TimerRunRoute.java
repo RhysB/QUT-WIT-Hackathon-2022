@@ -1,5 +1,6 @@
 package com.thebigsound.recapturethegame.routes;
 
+import com.thebigsound.recapturethegame.Launcher;
 import org.json.simple.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,7 @@ public class TimerRunRoute extends NormalRoute {
     protected void doPost(HttpServletRequest request, final HttpServletResponse response) throws IOException {
         response.setContentType("text/plain");
         response.setStatus(HttpServletResponse.SC_OK);
-        this.launcher.runTimerTasks();
+        Launcher.getLauncher().runTimerTasks();
         JSONObject responseObject = new JSONObject();
         responseObject.put("error", false);
         response.setContentType("application/json");

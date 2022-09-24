@@ -1,12 +1,18 @@
 package com.thebigsound.recapturethegame;
 
 import com.thebigsound.recapturethegame.game.GameLobby;
+import com.thebigsound.recapturethegame.game.GamePhase;
 import com.thebigsound.recapturethegame.game.Player;
+import com.thebigsound.recapturethegame.routes.TimerRunRoute;
+import com.thebigsound.recapturethegame.routes.api.CreateUser;
+import com.thebigsound.recapturethegame.routes.api.UpdateRoute;
+import com.thebigsound.recapturethegame.routes.webpages.ChatRoute;
 import com.thebigsound.recapturethegame.routes.webpages.IndexRoute;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import javax.servlet.GenericServlet;
@@ -15,7 +21,7 @@ import java.util.*;
 public class Launcher {
     private Server server;
 
-//    private ArrayList<Player> players = new ArrayList<>();
+    //    private ArrayList<Player> players = new ArrayList<>();
     private HashMap<Integer, GameLobby> lobbies = new HashMap<>();
 
     public HashMap<UUID, Player> getSessionIDToPlayer() {
@@ -24,20 +30,27 @@ public class Launcher {
 
     private HashMap<UUID, Player> sessionIDToPlayer = new HashMap<>();
 
-    private static Launcher launcher;
+    public static Launcher launcher;
 
     public static Launcher getLauncher() {
-        return Launcher.launcher;
+        return launcher;
     }
 
     public static void main(String[] args) throws Exception {
-        launcher = new Launcher(args);
+        new Launcher(args);
     }
 
 
     private Launcher(String[] args) throws Exception {
+        launcher = this;
         System.out.println("Starting ReCapture The Game");
-        startWebServers(7683);
+        int port = 7683;
+
+        System.out.println("Starting timer thread");
+        TimerPingThread timerPingThread = new TimerPingThread(port);
+        timerPingThread.start();
+        System.out.println("Starting webserver");
+        startWebServers(port);
 
     }
 
@@ -72,8 +85,10 @@ public class Launcher {
         //Webpages
         handler.addServlet(IndexRoute.class, "/");
         handler.addServlet(IndexRoute.class, "/index"); // Route for homepage
-
-
+        handler.addServlet(UpdateRoute.class, "/update"); // Route for POST update endpoint
+        handler.addServlet(TimerRunRoute.class, "/timer-run");
+        handler.addServlet(CreateUser.class, "/api/create-user");
+        handler.addServlet(ChatRoute.class, "/chat");
         //API
 
 
@@ -100,4 +115,15 @@ public class Launcher {
 
 
     }
+
+    public GameLobby getLobby(Integer sessionID) {
+        if (this.lobbies.containsKey(sessionID)) {
+            return this.lobbies.get(sessionID);
+        }
+        GameLobby lobby = new GameLobby(sessionID);
+        this.lobbies.put(sessionID, lobby);
+        return lobby;
+    }
+
+
 }
