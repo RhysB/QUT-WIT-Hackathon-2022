@@ -24,7 +24,7 @@ public class CreateUser extends NormalRoute {
         Player player = new Player(username, sessionID, gameLobby);
         gameLobby.playerConnect(player);
 
-        response.sendRedirect("../chat?sessionID=" + player.getSessionID());
+        response.sendRedirect("../chat?sessionID=" + player.getSessionID() + "&gameID=" + player.getSessionCode());
 
     }
 

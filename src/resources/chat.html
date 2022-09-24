@@ -2,17 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Lobby: {game.id}</title>
 
-
-    <script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
         //Get sessionID
         var chatMessages = [];
 
         var currentURL = window.location.protocol + "//" + window.location.host + "" + window.location.pathname + window.location.search
         var url = new URL(currentURL);
         var sessionID = url.searchParams.get("sessionID");
+        // var gameID = url.searchParams.get("gameID");
         console.log(sessionID);
+
+
+        $(document).ready(function () {
+            $('#text').keypress(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) {
+                    text = $('#text').val();
+                    $('#text').val('');
+                    console.log("Text: " + text)
+                    sendChatMessage(text)
+                }
+            });
+        });
 
         setInterval(runCycle, 1000);
         setTimeout(runCycle, 500);
@@ -37,6 +51,27 @@
                 if (xhr.readyState === 4) {
                     // console.log(xhr.status);
                     console.log(xhr.responseText);
+
+                    //Process incoming chat messages
+                    incomingJson = JSON.parse(xhr.responseText)
+
+                    incomingJson.forEach(function (array) {
+                        if (array["type"] == "message") {
+                            message = array["message"];
+                            $('#chat').val($('#chat').val() + message + '\n');
+                            $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                        }
+                    })
+
+                    // for(var i in incomingJson) {
+                    // jsonChatUpdate = incomingJson[i];
+                    // console.log("Json Object: " + JSON.stringify(i))
+                    // }
+
+                    // $('#chat').val($('#chat').val() + data.msg + '\n');
+                    // $('#chat').scrollTop($('#chat')[0].scrollHeight);
+
+
                 }
             };
 
@@ -56,11 +91,17 @@
             chatMessages = []
 
             // console.log("Cycle Run")
+
         }
+
+
     </script>
 
 </head>
 <body>
-
+<h1>ReCapture The Game: {game.id}</h1>
+<textarea id="chat" cols="80" rows="20"></textarea><br><br>
+<input id="text" size="80" placeholder="Enter your message here"><br><br>
+<!--<a href="#" onclick="leave_room();">Leave this room</a>-->
 </body>
 </html>

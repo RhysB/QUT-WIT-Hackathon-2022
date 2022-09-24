@@ -26,6 +26,8 @@ public class ChatRoute extends NormalRoute {
         InputStream inputStream = indexURL.openStream();
         String index = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 
+        index = index.replace("{game.id}", request.getParameter("gameID"));
+
         //Send Page
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(index);
