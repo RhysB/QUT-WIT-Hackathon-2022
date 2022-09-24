@@ -13,10 +13,23 @@ public class GameLobby {
     private int onlinePlayer = 0;
     private Launcher launcher;
 
+    public GamePhase getGamePhase() {
+        return gamePhase;
+    }
+
+    public void setGamePhase(GamePhase gamePhase) {
+        this.gamePhase = gamePhase;
+    }
+
+    private GamePhase gamePhase;
+
+    private long lastNotice;
+
 
     public GameLobby(int sessionCode) {
         this.sessionCode = sessionCode;
         this.launcher = Launcher.getLauncher();
+        this.gamePhase = GamePhase.WAITING;
     }
 
 
@@ -43,10 +56,25 @@ public class GameLobby {
                     //Player hasn't sent a message in three seconds. Disconnect them.
                     playerDisconnect(player);
                 }
-                return;
+//                return;
             }
             //Bot Checks
         }
+
+        //Waiting phase
+        if (gamePhase.equals(GamePhase.WAITING)) {
+            if (onlinePlayers() >= 3) {
+                gamePhase = GamePhase.COUNT_DOWN;
+                broadcastTest(onlinePlayers() + " have joined the game. The game will start in 30 seconds.");
+            } else {
+                if (lastNotice + 6 < (System.currentTimeMillis() / 1000L)) {
+                    lastNotice = (System.currentTimeMillis() / 1000L);
+                    broadcastTest("Waiting on " + (3 - onlinePlayers()) + " more players to start the game");
+                }
+            }
+        }
+
+
     }
 
     public int onlinePlayers() {

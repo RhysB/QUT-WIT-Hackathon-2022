@@ -55,8 +55,24 @@ public class Player implements ChattableObject {
         this.lastCheckin = lastCheckin;
     }
 
+    public void sendMessage(String message) {
+        JSONObject textEvent = new JSONObject();
+        textEvent.put("type", "message");
+        textEvent.put("message", message);
+        getJsonUpdates().add(textEvent);
+
+    }
+
     public ArrayList<JSONObject> getJsonUpdates() {
         return jsonUpdates;
+    }
+
+    private void processIncomingChatMessage(String message) {
+        if(this.lobby.getGamePhase().equals(GamePhase.WAITING)) {
+            sendMessage("You cannot send messages yet as the game hasn't started.");
+            return;
+        }
+        this.lobby.broadcastTest(this.username + ": " + message);
     }
 
     public void handleJsonUpdates(JSONArray jsonArray) {
@@ -65,7 +81,8 @@ public class Player implements ChattableObject {
 
             if(jsonObject.containsKey("type") && String.valueOf(jsonObject.get("type")).equalsIgnoreCase("message")) {
                 String message = String.valueOf(jsonObject.get("message"));
-                this.lobby.broadcastTest(this.username + ": " + message);
+                processIncomingChatMessage(message);
+//                this.lobby.broadcastTest(this.username + ": " + message);
             }
 
         }
