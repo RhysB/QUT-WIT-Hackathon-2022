@@ -67,8 +67,11 @@ public class Launcher {
                 continue;
             }
             //Lobby logic
-            gameLobby.runUpdates();
+//            gameLobby.runUpdates();
 
+        }
+        for(GameLobby lobby : lobbies.values()) {
+            lobby.runUpdates();
         }
 
     }

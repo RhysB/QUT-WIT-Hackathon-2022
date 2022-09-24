@@ -76,75 +76,88 @@
             <version>3.12.0</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>com.michaelwflaherty</groupId>-->
+<!--            <artifactId>cleverbotapi</artifactId>-->
+<!--            <version>1.0.3</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.michaelwflaherty</groupId>
             <artifactId>cleverbotapi</artifactId>
-            <version>1.0.3</version>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/cleverbotapi-1.0.3.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
     </dependencies>
 
 
-    <build>
-        <defaultGoal>clean install</defaultGoal>
-        <sourceDirectory>src</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>src</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Main-Class>com.thebigsound.recapturethegame.Launcher</Main-Class>
-                            <Implementation-Title>Legacy-Minecraft-Server-List-Receiver</Implementation-Title>
-                            <Implementation-Vendor>The Big Sound</Implementation-Vendor>
-                            <Specification-Title>ReCaptureTheGame</Specification-Title>
-                            <Specification-Version>${api.version}</Specification-Version>
-                            <Specification-Vendor>LegacyMinecraft</Specification-Vendor>
-                            <Sealed>true</Sealed>
-                        </manifestEntries>
-                        <manifestSections>
-                        </manifestSections>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>junit:junit</exclude>
-                                </excludes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <defaultGoal>clean install</defaultGoal>-->
+<!--        <sourceDirectory>src</sourceDirectory>-->
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src</directory>-->
+<!--                <excludes>-->
+<!--                    <exclude>**/*.java</exclude>-->
+<!--                </excludes>-->
+<!--            </resource>-->
+<!--        </resources>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
+<!--                <version>3.2.0</version>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifestEntries>-->
+<!--                            <Main-Class>com.thebigsound.recapturethegame.Launcher</Main-Class>-->
+<!--                            <Implementation-Title>Legacy-Minecraft-Server-List-Receiver</Implementation-Title>-->
+<!--                            <Implementation-Vendor>The Big Sound</Implementation-Vendor>-->
+<!--                            <Specification-Title>ReCaptureTheGame</Specification-Title>-->
+<!--                            <Specification-Version>${api.version}</Specification-Version>-->
+<!--                            <Specification-Vendor>LegacyMinecraft</Specification-Vendor>-->
+<!--                            <Sealed>true</Sealed>-->
+<!--                        </manifestEntries>-->
+<!--                        <manifestSections>-->
+<!--                        </manifestSections>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-shade-plugin</artifactId>-->
+<!--                <version>3.2.4</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>shade</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <artifactSet>-->
+<!--                                <excludes>-->
+<!--                                    <exclude>junit:junit</exclude>-->
+<!--                                </excludes>-->
+<!--                            </artifactSet>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.8.1</version>-->
+<!--                <configuration>-->
+<!--                    <source>1.8</source>-->
+<!--                    <target>1.8</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 </project>

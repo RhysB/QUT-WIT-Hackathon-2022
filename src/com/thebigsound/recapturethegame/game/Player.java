@@ -72,7 +72,8 @@ public class Player implements ChattableObject {
             sendMessage("You cannot send messages yet as the game hasn't started.");
             return;
         }
-        this.lobby.broadcastTest(this.username + ": " + message);
+        this.lobby.broadcastText(this.username + ": " + message);
+        this.lobby.getBot().cleverBotPost(message);
     }
 
     public void handleJsonUpdates(JSONArray jsonArray) {

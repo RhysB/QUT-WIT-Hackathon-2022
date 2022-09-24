@@ -10,7 +10,7 @@ public class GameLobby {
     private int sessionCode;
     private ArrayList<ChattableObject> players = new ArrayList<>();
     private HashMap<Long, String> chatMessages = new HashMap<>();
-    private int onlinePlayer = 0;
+    //    private int onlinePlayer = 0;
     private Launcher launcher;
 
     public GamePhase getGamePhase() {
@@ -24,12 +24,20 @@ public class GameLobby {
     private GamePhase gamePhase;
 
     private long lastNotice;
+    private long gameStartTime;
 
+    public Bot getBot() {
+        return bot;
+    }
 
+    private Bot bot;
     public GameLobby(int sessionCode) {
         this.sessionCode = sessionCode;
         this.launcher = Launcher.getLauncher();
         this.gamePhase = GamePhase.WAITING;
+
+
+        this.bot = new Bot(sessionCode, this);
     }
 
 
@@ -65,11 +73,27 @@ public class GameLobby {
         if (gamePhase.equals(GamePhase.WAITING)) {
             if (onlinePlayers() >= 3) {
                 gamePhase = GamePhase.COUNT_DOWN;
-                broadcastTest(onlinePlayers() + " have joined the game. The game will start in 30 seconds.");
+                broadcastText(onlinePlayers() + " have joined the game. The game will start in 30 seconds.");
+                gameStartTime = (System.currentTimeMillis() / 1000L) + 10;
             } else {
                 if (lastNotice + 6 < (System.currentTimeMillis() / 1000L)) {
                     lastNotice = (System.currentTimeMillis() / 1000L);
-                    broadcastTest("Waiting on " + (3 - onlinePlayers()) + " more players to start the game");
+                    broadcastText("Waiting on " + (3 - onlinePlayers()) + " more players to start the game");
+                }
+            }
+        } else if (gamePhase.equals(GamePhase.COUNT_DOWN)) {
+            if (onlinePlayers() < 3) {
+                gamePhase = GamePhase.WAITING;
+                broadcastText("The game no longer has enough players for a game.");
+            } else {
+                if (gameStartTime < (System.currentTimeMillis() / 1000L)) {
+                    if (lastNotice + 5 < (System.currentTimeMillis() / 1000L)) {
+                        lastNotice = (System.currentTimeMillis() / 1000L);
+                        broadcastText("The game will start in " + (gameStartTime - (System.currentTimeMillis() / 1000L)) + " seconds.");
+                    } else {
+                        gamePhase = GamePhase.ACTIVE;
+                        broadcastText("The game has started!");
+                    }
                 }
             }
         }
@@ -82,7 +106,7 @@ public class GameLobby {
     }
 
 
-    public void broadcastTest(String text) {
+    public void broadcastText(String text) {
         JSONObject textEvent = new JSONObject();
         textEvent.put("type", "message");
         textEvent.put("message", text);
