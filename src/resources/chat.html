@@ -9,7 +9,7 @@
         //Get sessionID
         var chatMessages = [];
 
-        var currentURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname + window.location.search
+        var currentURL = window.location.protocol + "//" + window.location.host + "" + window.location.pathname + window.location.search
         var url = new URL(currentURL);
         var sessionID = url.searchParams.get("sessionID");
         console.log(sessionID);
@@ -35,28 +35,25 @@
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
-                    console.log(xhr.status);
+                    // console.log(xhr.status);
                     console.log(xhr.responseText);
                 }
             };
 
-            let jsonUpdateArray = JSON.parse("[]");
+            let jsonUpdateArray = [];
 
             //Queue chat messages
             for (let i = 0; i < chatMessages.length; i++) {
-                var jsonUpdate = "{\n" +
-                    "                    \"type\": \"message\",\n" +
-                    "                    \"message\": " + chatMessages[i] + "\n" +
-                    "                }"
-                console.log(jsonUpdate)
-                jsonUpdateObject = JSON.parse(jsonUpdate)
-                jsonUpdateArray.push(jsonUpdateArray)
-
+                jsonUpdateArray.push({type: "message", message: chatMessages[i]})
             }
 
             let data = JSON.stringify(jsonUpdateArray);
 
             xhr.send(data);
+
+
+            //Reset Arrays
+            chatMessages = []
 
             // console.log("Cycle Run")
         }

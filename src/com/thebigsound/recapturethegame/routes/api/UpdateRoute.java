@@ -44,8 +44,10 @@ public class UpdateRoute extends NormalRoute {
         Player player = this.launcher.getSessionIDToPlayer().get(uuid);
 
 
-        System.out.println(player.getUsername() + " Has requested updates.");
+//        System.out.println(player.getUsername() + " Has requested updates.");
 
+        player.checkedIn(); //Update unix timestamp of last checkin
+        player.handleJsonUpdates(jsonObject); //Send updates to player class to be handled.
 
         JSONArray jsonArray = new JSONArray();
         for (JSONObject jsonObject1 : player.getJsonUpdates()) {
@@ -53,8 +55,6 @@ public class UpdateRoute extends NormalRoute {
         }
 
         player.getJsonUpdates().clear(); //Clear the updates after they have been sent.
-        player.checkedIn(); //Update unix timestamp of last checkin
-        player.handleJsonUpdates(jsonObject); //Send updates to player class to be handled.
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);

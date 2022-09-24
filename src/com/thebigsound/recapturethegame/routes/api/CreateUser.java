@@ -12,6 +12,22 @@ import java.io.IOException;
 
 public class CreateUser extends NormalRoute {
 
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        Integer sessionID = Integer.parseInt(request.getParameter("gameID"));
+
+        System.out.println("Connection Request: Username: " + username + ", GameID: " + sessionID);
+
+        GameLobby gameLobby = this.launcher.getLobby(sessionID);
+        Player player = new Player(username, sessionID, gameLobby);
+        gameLobby.playerConnect(player);
+
+        response.sendRedirect("../chat?sessionID=" + player.getSessionID());
+
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

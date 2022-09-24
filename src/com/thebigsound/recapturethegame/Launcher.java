@@ -84,7 +84,7 @@ public class Launcher {
 
         //Webpages
         handler.addServlet(IndexRoute.class, "/");
-        handler.addServlet(IndexRoute.class, "/index"); // Route for homepage
+//        handler.addServlet(IndexRoute.class, "/index"); // Route for homepage
         handler.addServlet(UpdateRoute.class, "/update"); // Route for POST update endpoint
         handler.addServlet(TimerRunRoute.class, "/timer-run");
         handler.addServlet(CreateUser.class, "/api/create-user");
