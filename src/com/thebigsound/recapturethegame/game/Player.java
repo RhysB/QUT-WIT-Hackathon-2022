@@ -85,6 +85,16 @@ public class Player implements ChattableObject {
         return jsonUpdates;
     }
 
+
+    public ChattableObject getLastVoteCast() {
+        return lastVoteCast;
+    }
+
+    public void setLastVoteCast(ChattableObject lastVoteCast) {
+        this.lastVoteCast = lastVoteCast;
+    }
+
+    public ChattableObject lastVoteCast;
     private void processIncomingChatMessage(String message) {
         if (this.lobby.getGamePhase().equals(GamePhase.WAITING)) {
             sendMessage("You cannot send messages yet as the game hasn't started.");
@@ -114,6 +124,7 @@ public class Player implements ChattableObject {
             if (voteTarget instanceof Bot) {
                 this.setPoints(getPoints() + 1); //Add point to current player as they have accurately guessed the bot.
             }
+            this.lastVoteCast = voteTarget;
             return;
         } else if (this.lobby.getGamePhase().equals(GamePhase.ACTIVE)) {
             this.lobby.broadcastText(this.secretIdentity + ": " + message);

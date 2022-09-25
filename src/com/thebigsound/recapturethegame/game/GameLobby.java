@@ -95,7 +95,7 @@ public class GameLobby {
                 if (phaseStartTime < (System.currentTimeMillis() / 1000L)) {
                     if (lastNotice + 5 < (System.currentTimeMillis() / 1000L)) {
                         lastNotice = (System.currentTimeMillis() / 1000L);
-                        broadcastText("The game will start in " + (phaseStartTime - (System.currentTimeMillis() / 1000L)) + " seconds.");
+//                        broadcastText("The game will start in " + (phaseStartTime - (System.currentTimeMillis() / 1000L)) + " seconds.");
                     } else {
                         //Refresh players
                         for (ChattableObject chattableObject : this.players) {
@@ -146,7 +146,8 @@ public class GameLobby {
                 } else {
                     //Intrim
                     gamePhase = GamePhase.WAITING;
-                    broadcastText("Round " + gameCount + "/3 has ended.");
+                    broadcastText("Round " + gameCount + "/1 has ended.");
+                    printWinningResults();
                 }
             }
         } else if (gamePhase.equals(GamePhase.GAME_ENDED)) {
@@ -211,6 +212,14 @@ public class GameLobby {
     public ArrayList<ChattableObject> getPlayers() {
         return players;
     }
+
+//    public Player getPlayer(String name) {
+//        for(Player player1 : this.players) {
+//            if(player1.getUsername().equalsIgnoreCase(name)) {
+//                return player1;
+//            }
+//        }
+//    }
 
     public ChattableObject getChattableObjectFromSecretIdentity(String identity) {
         for (ChattableObject chattableObject : this.getPlayers()) {

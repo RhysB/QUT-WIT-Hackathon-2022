@@ -47,7 +47,7 @@ public class Launcher {
     private Launcher(String[] args) throws Exception {
         launcher = this;
         System.out.println("Starting ReCapture The Game");
-        int port = 7683;
+        int port = 5000;
 
         System.out.println("Starting timer thread");
         TimerPingThread timerPingThread = new TimerPingThread(port);
