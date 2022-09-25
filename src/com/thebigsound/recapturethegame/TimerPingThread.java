@@ -53,7 +53,7 @@ public class TimerPingThread extends Thread {
                     connection = null;
                 }
                 try {
-                    Thread.sleep(100L);
+                    Thread.sleep(300L);
                 } catch (InterruptedException exception) {
                     System.out.println("Timer thread has been closed.");
                     break;

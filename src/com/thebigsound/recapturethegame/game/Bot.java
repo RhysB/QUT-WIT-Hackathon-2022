@@ -11,6 +11,10 @@ public class Bot implements ChattableObject {
 
     private String conversationID;
 
+    private String secretIdentity;
+
+    private int points;
+
     public Bot(int sessionCode, GameLobby lobby) {
         this.sessionCode = sessionCode;
         this.lobby = lobby;
@@ -34,7 +38,32 @@ public class Bot implements ChattableObject {
     }
 
     private void sendMessage(String message) {
-        this.lobby.broadcastText("Bot: " + message);
+        if (this.lobby.getGamePhase().equals(GamePhase.ACTIVE)) {
+            this.lobby.broadcastText(secretIdentity + ": " + message);
+        }
     }
 
+    @Override
+    public void setSecretIdentity(String identity) {
+        secretIdentity = identity;
+    }
+
+    @Override
+    public String getSecretIdentity() {
+        return secretIdentity;
+    }
+
+    @Override
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    @Override
+    public int getPoints() {
+        return this.points;
+    }
+
+    public String getUsername() {
+        return "Bot";
+    }
 }

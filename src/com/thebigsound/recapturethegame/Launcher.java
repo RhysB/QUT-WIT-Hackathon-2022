@@ -36,6 +36,8 @@ public class Launcher {
         return launcher;
     }
 
+    private long nextTick = 0;
+
     public static void main(String[] args) throws Exception {
         new Launcher(args);
     }
@@ -55,6 +57,10 @@ public class Launcher {
     }
 
     public void runTimerTasks() {
+        if (nextTick > (System.currentTimeMillis())) {
+            return;
+        }
+//        System.out.println("Running Tick");
         Iterator iterator = lobbies.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
@@ -70,10 +76,10 @@ public class Launcher {
 //            gameLobby.runUpdates();
 
         }
-        for(GameLobby lobby : lobbies.values()) {
+        for (GameLobby lobby : lobbies.values()) {
             lobby.runUpdates();
         }
-
+        nextTick = System.currentTimeMillis() + 500;
     }
 
     private void startWebServers(int port) throws Exception {
@@ -92,14 +98,6 @@ public class Launcher {
         handler.addServlet(TimerRunRoute.class, "/timer-run");
         handler.addServlet(CreateUser.class, "/api/create-user");
         handler.addServlet(ChatRoute.class, "/chat");
-        //API
-
-
-//        handler.addServlet(GetServersRoute.class, "/api/v1/getServers");
-//        handler.addServlet(ServerPingRoute.class, "/api/v1/serverPing");
-//        handler.addServlet(GetServerRoute.class, "/api/v1/getServer");
-//        handler.addServlet(TimerRunRoute.class, "/timer-run");
-//        handler.addServlet(HomeRoute.class, "/");
 
         handler.addServlet(GenericServlet.class, "/error");
 
