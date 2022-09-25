@@ -3,6 +3,10 @@ package com.thebigsound.recapturethegame.game;
 import com.michaelwflaherty.cleverbotapi.CleverBotQuery;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
 public class Bot implements ChattableObject {
 
@@ -21,7 +25,27 @@ public class Bot implements ChattableObject {
 
     }
 
+    public void runUpdates() {
+        String remove = null;
+
+        for (String key : messageArray.keySet()) {
+//            System.out.println("Entry: " + key);
+            if (messageArray.get(key) < (System.currentTimeMillis() / 1000L)) {
+                sendMessage(key);
+                remove = key;
+            }
+        }
+        if (remove != null) {
+            messageArray.remove(remove);
+        }
+
+    }
+
+    private HashMap<String, Long> messageArray = new HashMap<>();
+
     public void cleverBotPost(String message) {
+        boolean toSendMessage = new Random().nextInt(2) == 0;
+        int waitTime = new Random().nextInt(3) + 2;
         CleverBotQuery bot = new CleverBotQuery("CC9jefsVwbhcjxWVIdX33Mm4tUw", message);
         String response;
         if (conversationID != null) {
@@ -31,9 +55,12 @@ public class Bot implements ChattableObject {
             bot.sendRequest();
             response = bot.getResponse();
             conversationID = bot.getConversationID();
-            sendMessage(response);
+            if (toSendMessage) {
+                messageArray.put(response, (System.currentTimeMillis() / 1000L) + waitTime);
+                System.out.println("Added message \"" + response + "\" to queue to get posted in " + waitTime + " seconds.");
+            }
         } catch (IOException e) {
-            response = e.getMessage();
+//            response = e.getMessage();
         }
     }
 

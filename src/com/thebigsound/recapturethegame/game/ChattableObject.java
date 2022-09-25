@@ -13,4 +13,6 @@ public interface ChattableObject {
 
     public String getUsername();
 
+    public void runUpdates();
+
 }

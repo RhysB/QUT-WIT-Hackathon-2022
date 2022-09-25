@@ -59,6 +59,7 @@ public class GameLobby {
 
     public void runUpdates() {
         for (ChattableObject chattableObject : this.players) {
+            chattableObject.runUpdates();
             if (chattableObject instanceof Player) {
                 //Player Checks
                 Player player = (Player) chattableObject;

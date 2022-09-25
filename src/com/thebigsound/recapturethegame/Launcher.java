@@ -6,6 +6,7 @@ import com.thebigsound.recapturethegame.game.Player;
 import com.thebigsound.recapturethegame.routes.TimerRunRoute;
 import com.thebigsound.recapturethegame.routes.api.CreateUser;
 import com.thebigsound.recapturethegame.routes.api.UpdateRoute;
+import com.thebigsound.recapturethegame.routes.error.GenericError;
 import com.thebigsound.recapturethegame.routes.webpages.ChatRoute;
 import com.thebigsound.recapturethegame.routes.webpages.IndexRoute;
 import org.eclipse.jetty.server.Connector;
@@ -99,7 +100,7 @@ public class Launcher {
         handler.addServlet(CreateUser.class, "/api/create-user");
         handler.addServlet(ChatRoute.class, "/chat");
 
-        handler.addServlet(GenericServlet.class, "/error");
+        handler.addServlet(GenericError.class, "/error");
 
         ErrorPageErrorHandler errorPageErrorHandler = new ErrorPageErrorHandler();
         errorPageErrorHandler.addErrorPage(404, "/error");
